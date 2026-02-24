@@ -18,20 +18,20 @@ public class Controller {
 
     @PostMapping
     public ResponseEntity<String> post(@RequestBody PostRequestDto postRequestDto) {
-        service.post(postRequestDto.deskId(), postRequestDto.personPresent(), postRequestDto.stuffOnDesk());
-        return ResponseEntity.ok("Good");
+        boolean success = service.post(postRequestDto.deskId(), postRequestDto.personPresent(), postRequestDto.stuffOnDesk());
+        return success ? ResponseEntity.ok("worked") : ResponseEntity.badRequest().body("did not work");
     }
 
     @PutMapping
     public ResponseEntity<String> put(@RequestBody PutRequestDto putRequestDto) {
-        service.put(putRequestDto.deskId(), putRequestDto.personPresent(), putRequestDto.stuffOnDesk());
-        return ResponseEntity.ok("Good");
+        boolean success = service.put(putRequestDto.deskId(), putRequestDto.personPresent(), putRequestDto.stuffOnDesk());
+        return success ? ResponseEntity.ok("worked") : ResponseEntity.badRequest().body("did not work");
     }
 
     @GetMapping
-    public ResponseEntity<List<DeskStatus>> get() {
-        List<DeskStatus> result = service.get();
-        System.out.println(result);
+    public ResponseEntity<List<DeskState>> get() {
+        List<DeskState> result = service.get();
+        System.out.println("Result: " + result);
         return ResponseEntity.ok(result);
     }
  }

@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class Service {
         this.url = url;
     }
 
-    public void post(int deskId, boolean personPresent, boolean stuffOnDesk) {
+    public boolean post(int deskId, boolean personPresent, boolean stuffOnDesk) {
         Map<String, Object> postRow = Map.of(
                 "desk_id", deskId,
                 "person_present", personPresent,
@@ -40,12 +41,15 @@ public class Service {
         try {
             String postJson = MAPPER.writeValueAsString(postRow);
             sendPost(postJson);
+            return true;
+
         } catch (Exception e) {
-            // ...
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public void put(int deskId, boolean personPresent, boolean stuffOnDesk) {
+    public boolean put(int deskId, boolean personPresent, boolean stuffOnDesk) {
         Map<String, Object> putRow = Map.of(
                 "desk_id", deskId,
                 "person_present", personPresent,
@@ -55,25 +59,40 @@ public class Service {
         try {
             String putJson = MAPPER.writeValueAsString(putRow);
             sendPut("desk_id", String.valueOf(deskId), putJson);
+            return true;
         } catch (Exception e) {
-            // ...
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public List<DeskStatus> get()  {
+    public List<DeskState> get()  {
         try {
-            return sendGet();
-        } catch (Exception e) {
-            // ...
-        }
+            List<DeskState> result = new ArrayList<>();
+            for (DeskStatus ds : sendGet()) {
+                String key = ds.isPersonPresent() + "," + ds.isStuffOnDesk();
 
-        return null;
+                Status status = switch (key) {
+                    case "true,true", "true,false" -> Status.OCCUPIED;
+                    case "false,true" -> Status.RESERVED;
+                    default -> Status.VACANT;
+                };
+
+                result.add(new DeskState(ds.getDeskId(), status));
+            }
+
+            return result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     private List<DeskStatus> sendGet() throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder(new URI(url + tableName))
                 .header("apikey", secret)
-                .header("Authorization", "Bearer" + secret)
+                .header("Authorization", "Bearer " + secret)
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
