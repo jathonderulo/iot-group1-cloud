@@ -31,7 +31,7 @@ public class Service {
         this.url = url;
     }
 
-    public boolean post(int deskId, boolean personPresent, boolean stuffOnDesk) {
+    public boolean post(String deskId, boolean personPresent, boolean stuffOnDesk) {
         Map<String, Object> postRow = Map.of(
                 "desk_id", deskId,
                 "person_present", personPresent,
@@ -49,7 +49,7 @@ public class Service {
         }
     }
 
-    public boolean put(int deskId, boolean personPresent, boolean stuffOnDesk) {
+    public boolean put(String deskId, boolean personPresent, boolean stuffOnDesk) {
         Map<String, Object> putRow = Map.of(
                 "desk_id", deskId,
                 "person_present", personPresent,

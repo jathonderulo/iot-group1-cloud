@@ -8,21 +8,21 @@ import java.time.Instant;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class DeskStatus {
-    @JsonProperty("desk_id") private int deskId;
+    @JsonProperty("desk_id") private String deskId;
     @JsonProperty("person_present") private boolean personPresent;
     @JsonProperty("stuff_on_desk") private boolean stuffOnDesk;
     @JsonProperty("last_updated_at") private Instant lastUpdatedAt;
 
     public DeskStatus() {}
 
-    public DeskStatus(int deskId, boolean personPresent, boolean stuffOnDesk, Instant lastUpdatedAt) {
+    public DeskStatus(String deskId, boolean personPresent, boolean stuffOnDesk, Instant lastUpdatedAt) {
         this.deskId = deskId;
         this.personPresent = personPresent;
         this.stuffOnDesk = stuffOnDesk;
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
-    public int getDeskId() { return deskId; }
+    public String getDeskId() { return deskId; }
     public boolean isPersonPresent() { return personPresent; }
     public boolean isStuffOnDesk() { return stuffOnDesk; }
     public Instant getLastUpdatedAt() { return lastUpdatedAt; }
