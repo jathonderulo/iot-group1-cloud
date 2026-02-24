@@ -1,16 +1,18 @@
 N.B.: Get the apikey and database URL from jason/mia 
 
-Maven builds a fat jar, just send to vm and run the file 
+Maven builds a jar, just send to vm and run the file. Server listens on port 8080. Instructions below. 
 
 ## Usage
-Send updated code to ec2 instance:
+Create jar file, and send to the instance
 `mvn clean package && scp -i <path-to-pem-file>/<filename>.pem target/iot-group1-1.0-SNAPSHOT.jar ubuntu@16.170.224.70:/home/ubuntu`
 
 ssh to instance
-`ssh ... ubuntu@16.170.224.70`
+`ssh -i <path-to-pem-file>/<filename>.pem ubuntu@16.170.224.70`
 
 Run the file - ampersand gives the control of the terminal back to you, so you can run more commands with the program running
 `java -jar iot-group1-1.0-SNAPSHOT.jar &` 
+
+* You can't run two at the same time, because they'd be listening on the same port. Kill the old process first.
 
 To test the endpoints:
 PUT:
