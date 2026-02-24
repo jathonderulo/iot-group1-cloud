@@ -4,10 +4,10 @@ Maven builds a fat jar, just send to vm and run the file
 
 ## Usage
 Send updated code to ec2 instance:
-`mvn clean package && scp -i <path-to-pem-file>/<filename>.pem target/iot-group1-1.0-SNAPSHOT.jar ec2-user@51.21.255.101:/home/ec2-user`
+`mvn clean package && scp -i <path-to-pem-file>/<filename>.pem target/iot-group1-1.0-SNAPSHOT.jar ubuntu@16.170.224.70:/home/ubuntu`
 
 ssh to instance
-`ssh ... ec2-user@51.21.255.101`
+`ssh ... ubuntu@16.170.224.70`
 
 Run the file - ampersand gives the control of the terminal back to you, so you can run more commands with the program running
 `java -jar iot-group1-1.0-SNAPSHOT.jar &` 

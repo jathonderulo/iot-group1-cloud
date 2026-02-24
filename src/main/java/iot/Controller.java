@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import iot.dto.PostRequestDto;
 import iot.dto.PutRequestDto;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class Controller {
@@ -25,4 +27,11 @@ public class Controller {
         service.put(putRequestDto.deskId(), putRequestDto.personPresent(), putRequestDto.stuffOnDesk());
         return ResponseEntity.ok("Good");
     }
-}
+
+    @GetMapping
+    public ResponseEntity<List<DeskStatus>> get() {
+        List<DeskStatus> result = service.get();
+        System.out.println(result);
+        return ResponseEntity.ok(result);
+    }
+ }

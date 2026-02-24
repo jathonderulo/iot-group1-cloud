@@ -1,6 +1,7 @@
 package iot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
@@ -10,11 +11,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Service
 public class Service {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
 
     private final String secret;
     private final String url;
@@ -56,6 +58,30 @@ public class Service {
         } catch (Exception e) {
             // ...
         }
+    }
+
+    public List<DeskStatus> get()  {
+        try {
+            return sendGet();
+        } catch (Exception e) {
+            // ...
+        }
+
+        return null;
+    }
+
+    private List<DeskStatus> sendGet() throws URISyntaxException, IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(new URI(url + tableName))
+                .header("apikey", secret)
+                .header("Authorization", "Bearer" + secret)
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+
+        return MAPPER.readValue(response.body(), MAPPER.getTypeFactory().constructCollectionType(List.class, DeskStatus.class));
     }
 
     private void sendPost(String json) throws URISyntaxException, IOException, InterruptedException {
