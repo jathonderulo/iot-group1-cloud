@@ -1,6 +1,6 @@
 N.B.: Get the apikey and database URL from jason/mia 
 
-Maven builds a jar, just send to vm and run the file. Instructions below. 
+Maven builds a jar, just send to vm and run the file. Server listens on port 8080. Instructions below. 
 
 ## Usage
 Create jar file, and send to the instance
