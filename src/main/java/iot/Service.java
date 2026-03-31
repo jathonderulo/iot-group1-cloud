@@ -51,7 +51,7 @@ public class Service {
         }
     }
 
-    public boolean put(String deskId, boolean personPresent, boolean stuffOnDesk) {
+    public boolean put(String deskId, boolean personPresent, boolean stuffOnDesk) throws Exception {
         Map<String, Object> putRow = Map.of(
             "desk_id", deskId,
             "person_present", personPresent,
@@ -59,6 +59,11 @@ public class Service {
         );
 
         System.out.println("Received put");
+
+        DeskStatus currentStatus = getOneDesk(deskId); // assume it's not null lol
+        if (currentStatus.isPersonPresent() == personPresent && currentStatus.isStuffOnDesk() == stuffOnDesk) {
+            return true; // already true, don't update
+        }
 
         try {
             String putJson = MAPPER.writeValueAsString(putRow);
@@ -93,6 +98,25 @@ public class Service {
             e.printStackTrace();
             return List.of();
         }
+    }
+
+    private DeskStatus getOneDesk(String deskId) throws Exception {
+        String uri = url + tableName + "?" + "desk_id" + "=eq." + deskId;
+        HttpRequest request = HttpRequest.newBuilder(new URI(uri))
+                .header("apikey", secret)
+                .header("Authorization", "Bearer " + secret)
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+
+        List<DeskStatus> rows = MAPPER.readValue(
+                response.body(),
+                MAPPER.getTypeFactory().constructCollectionType(List.class, DeskStatus.class)
+        );
+
+        return rows.isEmpty() ? null : rows.get(0);
     }
 
     private List<DeskStatus> sendGet() throws URISyntaxException, IOException, InterruptedException {
