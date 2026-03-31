@@ -104,7 +104,7 @@ public class Service {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        System.out.println("Body: " + response);
 
         return MAPPER.readValue(response.body(), MAPPER.getTypeFactory().constructCollectionType(List.class, DeskStatus.class));
     }
@@ -118,7 +118,7 @@ public class Service {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        System.out.println("Body: " + response);
     }
 
     // Assumes a simple primary key (not composite)
@@ -132,6 +132,6 @@ public class Service {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        System.out.println("Body: " + response);
     }
 }
