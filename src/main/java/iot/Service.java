@@ -18,7 +18,6 @@ import java.util.Map;
 
 @org.springframework.stereotype.Service
 public class Service {
-
     private final HttpHelper httpHelper;
     private final ArchiveService archiveService;
 

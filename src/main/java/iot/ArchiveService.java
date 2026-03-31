@@ -1,7 +1,7 @@
 package iot;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +14,13 @@ import java.util.Map;
 @Service
 public class ArchiveService {
     private final HttpHelper httpHelper;
-    private static final ObjectMapper MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
+    private static final ObjectMapper MAPPER = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     private static final String OCCUPIED_TABLE = "occupied_archive";
     private static final String RESERVED_TABLE = "reserved_archive";
     private static final String VACANT_TABLE = "vacant_archive";
-    private static final String LIVE_TABLE = "test_table";
 
     public ArchiveService (HttpHelper httpHelper) {
         this.httpHelper = httpHelper;
@@ -37,9 +38,9 @@ public class ArchiveService {
 
         String durationTextField =
             switch (targetTable) {
-                case OCCUPIED_TABLE -> "occupied_archive";
-                case RESERVED_TABLE -> "reserved_archive";
-                case VACANT_TABLE -> "vacant_archive";
+                case OCCUPIED_TABLE -> "occupied_duration";
+                case RESERVED_TABLE -> "reserved_duration";
+                case VACANT_TABLE -> "vacant_duration";
                 default -> throw new IllegalStateException("Unexpected value: " + targetTable);
             };
 
