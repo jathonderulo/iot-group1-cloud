@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class Service {
                 "stuff_on_desk", stuffOnDesk
         );
 
+        System.out.println("Received post");
         try {
             String postJson = MAPPER.writeValueAsString(postRow);
             sendPost(postJson);
@@ -51,10 +53,12 @@ public class Service {
 
     public boolean put(String deskId, boolean personPresent, boolean stuffOnDesk) {
         Map<String, Object> putRow = Map.of(
-                "desk_id", deskId,
-                "person_present", personPresent,
-                "stuff_on_desk", stuffOnDesk
+            "desk_id", deskId,
+            "person_present", personPresent,
+            "stuff_on_desk", stuffOnDesk
         );
+
+        System.out.println("Received put");
 
         try {
             String putJson = MAPPER.writeValueAsString(putRow);
@@ -80,6 +84,8 @@ public class Service {
 
                 result.add(new DeskState(ds.getDeskId(), status));
             }
+
+            System.out.println("Received get");
 
             return result;
 
