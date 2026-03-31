@@ -61,14 +61,14 @@ public class Service {
         try {
             DeskStatus currentStatus = getOneDesk(deskId); // assume it's not null lol
             if (currentStatus.isPersonPresent() == personPresent && currentStatus.isStuffOnDesk() == stuffOnDesk) {
-                System.out.println("Received put for " + deskId + " , but no state change");
+                System.out.println("Received put for " + deskId + ", but no state change");
                 return true; // already true, don't update
             }
 
             System.out.println("Received put for " + deskId + ", with state change ");
 
             String putJson = MAPPER.writeValueAsString(putRow);
-            sendPut("desk_id", String.valueOf(deskId), putJson);
+            sendPut("desk_id", deskId, putJson);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
