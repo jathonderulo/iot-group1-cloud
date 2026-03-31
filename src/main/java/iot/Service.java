@@ -65,7 +65,7 @@ public class Service {
                 return true; // already true, don't update
             }
 
-            System.out.println("Received put for " + deskId + " , with state change ");
+            System.out.println("Received put for " + deskId + ", with state change ");
 
             String putJson = MAPPER.writeValueAsString(putRow);
             sendPut("desk_id", String.valueOf(deskId), putJson);
