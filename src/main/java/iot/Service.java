@@ -51,7 +51,7 @@ public class Service {
         }
     }
 
-    public boolean put(String deskId, boolean personPresent, boolean stuffOnDesk) throws Exception {
+    public boolean put(String deskId, boolean personPresent, boolean stuffOnDesk) {
         Map<String, Object> putRow = Map.of(
             "desk_id", deskId,
             "person_present", personPresent,
@@ -59,13 +59,12 @@ public class Service {
         );
 
         System.out.println("Received put");
-
-        DeskStatus currentStatus = getOneDesk(deskId); // assume it's not null lol
-        if (currentStatus.isPersonPresent() == personPresent && currentStatus.isStuffOnDesk() == stuffOnDesk) {
-            return true; // already true, don't update
-        }
-
         try {
+            DeskStatus currentStatus = getOneDesk(deskId); // assume it's not null lol
+            if (currentStatus.isPersonPresent() == personPresent && currentStatus.isStuffOnDesk() == stuffOnDesk) {
+                return true; // already true, don't update
+            }
+
             String putJson = MAPPER.writeValueAsString(putRow);
             sendPut("desk_id", String.valueOf(deskId), putJson);
             return true;
@@ -109,7 +108,7 @@ public class Service {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         List<DeskStatus> rows = MAPPER.readValue(
                 response.body(),
